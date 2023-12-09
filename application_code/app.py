@@ -18,6 +18,7 @@ def index():
             TargetLanguageCode=target_language
         )
         translation = response['TranslatedText']
+
     
     return render_template('index.html', translation=translation)
 
@@ -27,6 +28,7 @@ def speech():
     target_language = request.form.get('target_language')
     
     # Translate the text
+    # print(target_language)
     translation_response = translate_client.translate_text(
         Text=source_text,
         SourceLanguageCode='en',
@@ -34,12 +36,50 @@ def speech():
     )
     translated_text = translation_response['TranslatedText']
     
+    # print(target_language)
+    # if target_language == "ja":
+    #     # Synthesize Speech using Amazon Polly
+    #     polly_response = polly_client.synthesize_speech(
+    #     OutputFormat='mp3',
+    #     Text=translated_text,
+    #     VoiceId='Mizuki'  # Choose a suitable voice ID
+    # )
+    #     print(target_language)
+    #     audio_stream = polly_response['AudioStream']
+    
+    #     # return Response(audio_stream, mimetype='audio/mpeg')
+
+    # elif target_language == "es":
+    #     # Synthesize Speech using Amazon Polly
+    #     polly_response = polly_client.synthesize_speech(
+    #     OutputFormat='mp3',
+    #     Text=translated_text,
+    #     VoiceId='Mia'  # Choose a suitable voice ID
+    # )
+    #     print(target_language)
+    #     audio_stream = polly_response['AudioStream']
+    
+    #     # return Response(audio_stream, mimetype='audio/mpeg')    
+    
+    # elif target_language == "fr":
+    #     # Synthesize Speech using Amazon Polly
+    #     polly_response = polly_client.synthesize_speech(
+    #     OutputFormat='mp3',
+    #     Text=translated_text,
+    #     VoiceId='Léa'  # Choose a suitable voice ID
+    # )
+    #     print(target_language)
+    #     audio_stream = polly_response['AudioStream']
+    
+        # return Response(audio_stream, mimetype='audio/mpeg') 
+
     # Synthesize Speech using Amazon Polly
     polly_response = polly_client.synthesize_speech(
         OutputFormat='mp3',
         Text=translated_text,
         VoiceId='Joanna'  # Choose a suitable voice ID
     )
+    print(target_language)
     audio_stream = polly_response['AudioStream']
     
     return Response(audio_stream, mimetype='audio/mpeg')
