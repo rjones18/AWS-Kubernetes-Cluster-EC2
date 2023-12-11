@@ -23,7 +23,7 @@ resource "aws_security_group" "my_public_app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-    // # HTTP Access
+  // # HTTP Access
   // ingress {
   //   description = "Allow HTTP into the EC2"
   //   from_port   = 8080
