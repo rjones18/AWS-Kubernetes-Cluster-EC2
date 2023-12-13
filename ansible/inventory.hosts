@@ -1,20 +1,14 @@
 [master_server]
-18.212.9.209
+44.211.144.161
 
 
 [worker1]
-3.83.224.120
+44.204.181.203
 
 
 [worker2]
-34.207.128.99
+44.211.125.240
 
-
-# [web_servers:children]
-# master
-
-# [web_servers:children]
-# master_server
 
 [master_server:vars]
 ansible_user=ubuntu

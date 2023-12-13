@@ -15,76 +15,9 @@ resource "aws_iam_role" "example" {
   })
 }
 
-resource "aws_iam_policy" "ecr_policy" {
-  name        = "ecr_policy"
-  description = "A policy that allows access to a specific ECR repo"
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
-          "ecr:BatchCheckLayerAvailability"
-        ],
-        Resource = "arn:aws:ecr:us-east-1:614768946157:repository/translator-app"
-      },
-      {
-        Effect   = "Allow",
-        Action   = "ecr:GetAuthorizationToken",
-        Resource = "*"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_policy" "lb_policy" {
-  name        = "lb_policy"
-  description = "A policy that allows access to LB"
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "ec2:Describe*",
-          "ec2:CreateLoadBalance*",
-          "ec2:DeleteLoadBalancer*",
-          "elasticloadbalancing:*",
-        ],
-        Resource = "*"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "lb_attach" {
-  role       = aws_iam_role.example.name
-  policy_arn = aws_iam_policy.lb_policy.arn
-}
-
-resource "aws_iam_role_policy_attachment" "ec2_ecr_attach" {
-  role       = aws_iam_role.example.name
-  policy_arn = aws_iam_policy.ecr_policy.arn
-}
-
-resource "aws_iam_role_policy_attachment" "polly-attach" {
-  role       = aws_iam_role.example.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "translate-attach" {
-  role       = aws_iam_role.example.name
-  policy_arn = "arn:aws:iam::aws:policy/TranslateFullAccess"
-}
-
-
 
 resource "aws_iam_instance_profile" "example" {
-  name = "traslator_profile"
+  name = "kubernetes_profile"
   role = aws_iam_role.example.name
 }
 
