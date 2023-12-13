@@ -15,9 +15,93 @@ resource "aws_iam_role" "example" {
   })
 }
 
+resource "aws_iam_policy" "ecr_policy" {
+  name        = "ecr_policy"
+  description = "A policy that allows access to a specific ECR repo"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability"
+        ],
+        Resource = "arn:aws:ecr:us-east-1:614768946157:repository/translator-app"
+      },
+      {
+        Effect   = "Allow",
+        Action   = "ecr:GetAuthorizationToken",
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "lb_policy" {
+  name        = "lb_policy"
+  description = "A policy that allows access to LB"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ec2:Describe*",
+          "ec2:CreateLoadBalance*",
+          "ec2:DeleteLoadBalancer*",
+          "ec2:DescribeAccountAttributes",
+          "ec2:DescribeAddresses",
+          "ec2:DescribeAvailabilityZones",
+          "ec2:DescribeInternetGateways",
+          "ec2:DescribeVpcs",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DescribeInstances",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DescribeTags",
+          "ec2:GetCoipPoolUsage",
+          "ec2:DescribeCoipPools",
+          "elasticloadbalancing:*",
+          "elasticloadbalancing:CreateLoadBalancer",
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lb_attach" {
+  role       = aws_iam_role.example.name
+  policy_arn = aws_iam_policy.lb_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_ecr_attach" {
+  role       = aws_iam_role.example.name
+  policy_arn = aws_iam_policy.ecr_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "polly-attach" {
+  role       = aws_iam_role.example.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "translate-attach" {
+  role       = aws_iam_role.example.name
+  policy_arn = "arn:aws:iam::aws:policy/TranslateFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "full-lb-attach" {
+  role       = aws_iam_role.example.name
+  policy_arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
+}
+
 
 resource "aws_iam_instance_profile" "example" {
-  name = "kubernetes_profile"
+  name = "traslator_profile"
   role = aws_iam_role.example.name
 }
 
