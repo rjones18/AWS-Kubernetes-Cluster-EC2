@@ -1,23 +1,23 @@
 [master_server]
-52.91.190.131
+3.80.156.119
 
 
 [worker1]
-54.89.144.111
+44.208.164.152
 
 
 [worker2]
-184.73.58.223
+44.211.198.125
 
 
 [master_server:vars]
 ansible_user=ubuntu
-ansible_ssh_private_key_file=~/Downloads/Mackey.pem
+ansible_ssh_private_key_file=~/Downloads/Mackey2024.pem
 
 [worker1:vars]
 ansible_user=ubuntu
-ansible_ssh_private_key_file=~/Downloads/Mackey.pem
+ansible_ssh_private_key_file=~/Downloads/Mackey2024.pem
 
 [worker2:vars]
 ansible_user=ubuntu
-ansible_ssh_private_key_file=~/Downloads/Mackey.pem
+ansible_ssh_private_key_file=~/Downloads/Mackey2024.pem
